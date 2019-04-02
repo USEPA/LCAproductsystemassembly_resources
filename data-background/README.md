@@ -4,6 +4,8 @@
 ### LCI
 [Federal LCA Commons Data, including USLCI](https://www.lcacommons.gov/lca-collaboration)
 
+[ElectricityLCI](https://github.com/usepa/electricitylci) model ELCI_1 for CAMX eGRID subregion, assembled in [eLCI_df_to_dict_to_jsonld.py](../eLCI_df_to_dict_to_jsonld.py)
+
 [USEEIOv1.1, complete with LCIA methods, JSON-LD format](https://catalog.data.gov/dataset/useeiov1-1-openlca)
 
 [GLAD](https://www.globallcadataaccess.org/)
