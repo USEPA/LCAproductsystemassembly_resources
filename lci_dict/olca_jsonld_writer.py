@@ -8,6 +8,7 @@ from typing import Optional
 
 import olca
 import olca.pack as pack
+import olca.units as units
 
 
 def write(processes: dict, file_path: str):
@@ -102,10 +103,10 @@ def _unit(unit_name: str) -> Optional[olca.Ref]:
     """ Get the ID of the openLCA reference unit with the given name. """
     ref_id = None
     try:
-        ref_id = olca_units.loc[olca_units['Unit']==unit_name,'Unit UUID'].iloc[0]
+        unit_ref = units.unit_ref(unit_name)
     except:
         log.error('unknown unit %s; no unit reference', unit_name)
-    return olca.ref(olca.Unit, ref_id, unit_name)
+    return unit_ref
 
 def _flow_property(unit_name: str) -> Optional[olca.Ref]:
     """ Get the ID of the openLCA reference flow property for the unit with
