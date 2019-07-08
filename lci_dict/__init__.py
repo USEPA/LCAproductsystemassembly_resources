@@ -1,6 +1,7 @@
 import time
 from lci_dict.globals import *
 from lci_dict.olca_jsonld_writer import write
+import olca.units as units
 
 def create_flow(name,flowtype='PRODUCT_FLOW'):
     ar = dict()
@@ -89,7 +90,7 @@ def create_exchange(name,amount,unit_name,is_reference=False):
 
 def create_unit(unt):
     ar = dict()
-    ar['internalId']= olca_units.loc[olca_units['Unit']==unt,'Unit UUID'].iloc[0]
+    ar['internalId']= units.unit_ref(unt).id
     ar['@type']='Unit'
     ar['name'] = unt
     return ar
