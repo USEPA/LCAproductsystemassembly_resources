@@ -100,8 +100,7 @@ def _exchange(d: dict, writer: pack.Writer,
 
 
 def _unit(unit_name: str) -> Optional[olca.Ref]:
-    """ Get the ID of the openLCA reference unit with the given name. """
-    ref_id = None
+    """ Get the openLCA object reference to the unit with the given name. """
     try:
         unit_ref = units.unit_ref(unit_name)
     except:
@@ -109,17 +108,12 @@ def _unit(unit_name: str) -> Optional[olca.Ref]:
     return unit_ref
 
 def _flow_property(unit_name: str) -> Optional[olca.Ref]:
-    """ Get the ID of the openLCA reference flow property for the unit with
-        the given name.
-    """
-    ref_id = None
-    ref_name = None
+    """ Get the openLCA object reference to the flow property for the given unit"""
     try:
-        ref_id = olca_units.loc[olca_units['Unit']==unit_name,'Flow Property UUID'].iloc[0]
-        ref_name = olca_units.loc[olca_units['Unit'] == unit_name, 'Flow Property'].iloc[0]
+        ref = units.property_ref(unit_name)
     except:
         log.error('unknown unit %s; no flow property reference', unit_name)
-    return olca.ref(olca.FlowProperty, ref_id, ref_name)
+    return ref
 
 def _flow(d: dict, flowprop: olca.Ref, writer: pack.Writer,
           created_ids: set) -> Optional[olca.Ref]:
