@@ -1,11 +1,18 @@
-import xlrd
+"""
+Checks BOM files for format and integrity to assure LCI can be generated
+"""
 
+import xlrd
+import os
+
+bom_directory = os.path.realpath('data-foreground/')
 files = ["BOM_1.xlsx", "BOM_2.xlsx"]
 
 def main():
 
     for f in files:
-        wb = xlrd.open_workbook("./" + f)
+        wb_path = bom_directory + os.path.sep + f
+        wb = xlrd.open_workbook(wb_path)
         print("Check file", f)
         for sheet_name in wb.sheet_names():
             print("  Check sheet", sheet_name)

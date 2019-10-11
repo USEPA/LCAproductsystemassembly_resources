@@ -10,6 +10,8 @@ PT
 QNA
 Part Name
 Next Assembly
+
+Requires lci_dict from https://github.com/WesIngwersen/lci_dict
 """
 
 #Get data from BOM data files
@@ -25,7 +27,7 @@ data_folder = 'data-foreground/'
 output_folder = 'output/'
 
 #Provide a dictionary that define names of Excel files with BOM and number of sheets in each. This could be multiple files
-BOM_name_sheets = {'BOM_1':5}  #,'BOM_2':5}
+BOM_name_sheets = {'BOM_1':5,'BOM_2':3}
 
 def main():
 
@@ -68,7 +70,7 @@ def main():
             processes_dict[row['Part Name']+'-'+row['Part Number']] = process_dict
 
     #how many processes?
-    log.info('Createde dictionary with ' + str(len(processes_dict)) + ' processes.')
+    log.info('Created dictionary with ' + str(len(processes_dict)) + ' processes.')
 
     #Summarize
     process_summary_df = pd.DataFrame(columns=['ProcessName','NumExchanges','Cutoffs'])
