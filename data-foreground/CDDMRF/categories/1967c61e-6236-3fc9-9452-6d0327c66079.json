@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"1967c61e-6236-3fc9-9452-6d0327c66079","name":"3312: Steel Product Manufacturing from Purchased Steel","version":"00.00.000","category":{"@type":"Category","@id":"a895f552-8d74-3811-ba64-9db9e0a45f2b","name":"31-33: Manufacturing","categoryType":"Flow"},"modelType":"FLOW"}

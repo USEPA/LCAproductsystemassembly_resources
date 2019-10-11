@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"aecd3514-bca6-3487-a818-f261adc78e64","name":"3273: Cement and Concrete Product Manufacturing","version":"00.00.000","category":{"@type":"Category","@id":"a895f552-8d74-3811-ba64-9db9e0a45f2b","name":"31-33: Manufacturing","categoryType":"Flow"},"modelType":"FLOW"}

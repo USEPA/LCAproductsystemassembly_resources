@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"8c3e54e8-1cab-38df-a8e6-caf604cff894","name":"2211: Electric Power Generation, Transmission and Distribution","version":"00.00.000","category":{"@type":"Category","@id":"7ae0bfc1-7c4b-3a59-895e-e9bf4ab1aa3c","name":"22: Utilities","categoryType":"Flow"},"modelType":"FLOW"}

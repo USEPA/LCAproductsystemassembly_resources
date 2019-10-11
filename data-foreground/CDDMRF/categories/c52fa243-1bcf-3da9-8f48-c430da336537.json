@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"c52fa243-1bcf-3da9-8f48-c430da336537","name":"3211: Sawmills and Wood Preservation","version":"00.00.000","category":{"@type":"Category","@id":"a895f552-8d74-3811-ba64-9db9e0a45f2b","name":"31-33: Manufacturing","categoryType":"Flow"},"modelType":"FLOW"}
