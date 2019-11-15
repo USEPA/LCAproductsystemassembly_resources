@@ -11,10 +11,10 @@ QNA
 Part Name
 Next Assembly
 
-Requires lci_dict from https://github.com/WesIngwersen/lci_dict
+Requires pandas and lci_dict from https://github.com/WesIngwersen/lci_dict
 """
 
-#Get data from BOM data files
+# Get data from BOM data files
 import pandas as pd
 import lci_dict
 import os
@@ -23,16 +23,16 @@ import sys
 
 log.basicConfig(level=log.INFO, format='%(levelname)s %(message)s',
                 stream=sys.stdout)
-data_folder = 'data-foreground/'
-output_folder = 'output/'
+data_folder = 'data/PrintedCircuitBoard/'
+output_folder = 'output/PrintedCircuitBoard/'
 
-#Provide a dictionary that define names of Excel files with BOM and number of sheets in each. This could be multiple files
-BOM_name_sheets = {'BOM_1':5,'BOM_2':3}
+# Provide a dictionary that define names of Excel files with BOM and number of sheets in each. This could be multiple files
+BOM_name_sheets = {'BOM_1': 1}
+
 
 def main():
-
     assembly_df = pd.DataFrame()
-    for k,v in BOM_name_sheets.items():
+    for k, v in BOM_name_sheets.items():
         BOM_file = data_folder + k + '.xlsx'
         for s in range(v):
             df = pd.read_excel(BOM_file, sheet_name=s)
@@ -41,77 +41,66 @@ def main():
             assembly_df = assembly_df.append(df, ignore_index=True)
         log.info('Created data frame "assembly_df" with assembly info')
 
-    #Convert columns to numeric that should be so
-    import numpy as np
+    # Convert columns to numeric that should be so
     assembly_df['QNA'] = pd.to_numeric(assembly_df['QNA'], errors='coerce')
     assembly_df['Level'] = pd.to_numeric(assembly_df['Level'], errors='coerce')
     assembly_df['Part Name'] = assembly_df['Part Name'].astype('str')
     assembly_df['Part Number'] = assembly_df['Part Number'].astype('str')
 
-    #Create a process dictionary
+    # Create a process dictionary
     log.info('Creating a process dictionary')
     processes_dict = {}
     for index, row in assembly_df.iterrows():
-        #Create exchanges for ref flow and all inputs. Determine these based on 'Next Assembly'
-        #Subset df for 'next-assembly' to add all as exchanges
+        # Create exchanges for ref flow and all inputs. Determine these based on 'Next Assembly'
+        # Subset df for 'next-assembly' to add all as exchanges
         inputs_df = assembly_df[assembly_df['Next Assembly'] == row['Part Number']]
 
-        #Only proceed if there are inputs to this item
+        # Only proceed if there are inputs to this item
         if len(inputs_df) > 0:
             # create a list of exchanges for all these records
             exchanges = []
             # Create ref flow first
-            exchanges.append(lci_dict.create_exchange(row['Part Name']+'-'+row['Part Number'], 1, 'Item(s)', is_reference=True))
-            input_exchanges = [lci_dict.create_exchange(r['Part Name']+'-'+r['Part Number'], r['QNA'], 'Item(s)') for i, r in inputs_df.iterrows()]
+            exchanges.append(
+                lci_dict.create_exchange(row['Part Name'] + '-' + row['Part Number'], 1, 'Item(s)',
+                                         is_reference=True))
+            input_exchanges = [
+                lci_dict.create_exchange(r['Part Name'] + '-' + r['Part Number'], r['QNA'],
+                                         'Item(s)') for i, r in inputs_df.iterrows()]
             for e in input_exchanges:
                 exchanges.append(e)
-            #Create process with exchanges
-            process_dict = lci_dict.create_process(row['Part Name']+'-'+row['Part Number'], exchanges)
-            processes_dict[row['Part Name']+'-'+row['Part Number']] = process_dict
+            # Create process with exchanges
+            process_dict = lci_dict.create_process(row['Part Name'] + '-' + row['Part Number'],
+                                                   exchanges)
+            processes_dict[row['Part Name'] + '-' + row['Part Number']] = process_dict
 
-    #how many processes?
+    # how many processes?
     log.info('Created dictionary with ' + str(len(processes_dict)) + ' processes.')
 
-    #Summarize
-    process_summary_df = pd.DataFrame(columns=['ProcessName','NumExchanges','Cutoffs'])
-    for k,v in processes_dict.items():
+    # Summarize
+    process_summary_df = pd.DataFrame(columns=['ProcessName', 'NumExchanges', 'Cutoffs'])
+    for k, v in processes_dict.items():
         a = {}
         a['ProcessName'] = k
         a['NumExchanges'] = len(v['exchanges'])
-        #Determine number of cutoffs
+        # Determine number of cutoffs
         cutoffs = 0
         for e in v['exchanges']:
             f_name = e['flow']['name']
             try:
                 processes_dict[f_name]
-            except KeyError: #
+            except KeyError:  #
                 cutoffs = cutoffs + 1
         a['Cutoffs'] = cutoffs
-        process_summary_df = process_summary_df.append(a,ignore_index=True)
+        process_summary_df = process_summary_df.append(a, ignore_index=True)
 
-    #Write these processes out to an olca jsonld archive
+    # Write these processes out to an olca jsonld archive
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
     log.info('Writing JSON_LD zip archive to output folder')
-    lci_dict.write_olca_jsonld(processes_dict,output_folder+'assemblyPSM.zip')
+    lci_dict.write_olca_jsonld(processes_dict, output_folder + 'assemblyPSM.zip')
 
-    process_summary_df.to_csv(output_folder+'assembly_process_summary.csv',index=False)
+    process_summary_df.to_csv(output_folder + 'assembly_process_summary.csv', index=False)
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

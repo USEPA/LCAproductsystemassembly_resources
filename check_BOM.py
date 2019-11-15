@@ -5,8 +5,8 @@ Checks BOM files for format and integrity to assure LCI can be generated
 import xlrd
 import os
 
-bom_directory = os.path.realpath('data-foreground/')
-files = ["BOM_1.xlsx", "BOM_2.xlsx"]
+bom_directory = os.path.realpath('data/PrintedCircuitBoard/')
+files = ["BOM_1.xlsx"]
 
 def main():
 
